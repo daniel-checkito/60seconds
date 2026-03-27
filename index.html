@@ -189,6 +189,17 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .star{font-size:20px;cursor:pointer;opacity:.2;transition:opacity .15s;}
 .star.on{opacity:1;}
 
+/* revise bar */
+.revise-bar{display:none;border-top:1px solid var(--g2);padding:12px;flex-shrink:0;flex-direction:column;gap:7px;background:#fff;}
+.revise-bar.show{display:flex;}
+.revise-label{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--or);text-transform:uppercase;}
+.revise-row{display:flex;gap:6px;}
+.revise-ta{flex:1;border:1.5px solid var(--g2);border-radius:8px;padding:8px 11px;font-family:'DM Sans';font-size:12px;line-height:1.5;resize:none;color:var(--bk);background:#fff;transition:border-color .15s;}
+.revise-ta:focus{outline:none;border-color:var(--or);}
+.revise-btn{background:var(--or);color:#fff;border:none;border-radius:7px;padding:8px 14px;font-family:'DM Sans';font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .15s;}
+.revise-btn:hover:not(:disabled){background:#e55f00;}
+.revise-btn:disabled{background:var(--g3);cursor:not-allowed;}
+
 /* export overlay */
 #ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(6px);}
 #ov.on{display:flex;}
@@ -292,6 +303,14 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
         <p>Type your video idea on the left and hit Generate. The script will appear here, ready to paste into ElevenLabs.</p>
       </div>
     </div>
+    <!-- REVISE BAR -->
+    <div class="revise-bar" id="reviseBar">
+      <div class="revise-label">✏️ Revise this script</div>
+      <div class="revise-row">
+        <textarea class="revise-ta" id="reviseInput" rows="2" placeholder="e.g. 'make the hook a question' or 'make it longer' or 'focus more on Etsy sellers'…"></textarea>
+        <button class="revise-btn" id="reviseBtn" onclick="doRevise()">Apply →</button>
+      </div>
+    </div>
   </div>
 
   <!-- RESIZE HANDLE — right -->
@@ -327,6 +346,7 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 const N8N = 'https://meshminds.app.n8n.cloud/webhook/voiceover-studio';
 
 let currentScript = null;
+let currentTopic = '';
 let chatW = 320, edW = 260;
 const MIN_PANEL = 160, MIN_CTR = 300;
 
@@ -404,6 +424,7 @@ async function doGenerate(){
     renderScript(currentScript, topic);
     renderStats(currentScript);
     document.getElementById('copyBtn').disabled = false;
+    document.getElementById('reviseBar').classList.add('show');
     document.getElementById('ratingSec').style.display = 'block';
     addMsg('ai', `✅ <strong>${currentScript.estimated_seconds}s script</strong> ready — ${currentScript.word_count} words. Paste into ElevenLabs!`);
 
@@ -591,6 +612,60 @@ function escHtml(t){ return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&l
 
 function reset(){
   document.getElementById('copyBtn').disabled = true;
+}
+
+// ── REVISE ───────────────────────────────────────────────
+async function doRevise() {
+  if (!currentScript) return;
+  const inp = document.getElementById('reviseInput');
+  const instructions = inp.value.trim();
+  if (!instructions) return;
+
+  const btn = document.getElementById('reviseBtn');
+  btn.disabled = true;
+  btn.textContent = 'Revising…';
+  addMsg('user', `✏️ ${instructions}`);
+  addTyping();
+  showLoad(true, 'Applying your changes…');
+
+  try {
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), 60000);
+    const res = await fetch(N8N, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'revise',
+        existing_script: currentScript.script,
+        instructions: instructions,
+        format: currentScript.format,
+        length: String(currentScript.estimated_seconds),
+        platform: currentScript.platform
+      }),
+      keepalive: true, signal: ctrl.signal
+    });
+    clearTimeout(t);
+    const data = await res.json();
+    removeTyping();
+    showLoad(false);
+
+    if (!data.success) {
+      addMsg('ai', `❌ Revision failed: ${data.error || 'Check n8n.'}`);
+    } else {
+      currentScript = data.result;
+      // preserve topic from existing state
+      renderScript(currentScript, currentTopic);
+      renderStats(currentScript);
+      addMsg('ai', '✅ Script revised!');
+      inp.value = '';
+    }
+  } catch(err) {
+    removeTyping(); showLoad(false);
+    addMsg('ai', `❌ ${err.name==='AbortError' ? 'Timed out.' : 'Error: '+err.message}`);
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Apply →';
 }
 
 // ── RATING ───────────────────────────────────────────────
