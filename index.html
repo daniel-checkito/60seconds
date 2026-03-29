@@ -178,9 +178,7 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .legend-dot.hook{background:rgba(255,107,0,.3);}
 .legend-dot.body{background:rgba(255,214,0,.4);}
 .legend-dot.cta{background:rgba(34,197,94,.25);}
-.regen-hook-btn{display:flex;align-items:center;gap:6px;padding:8px 14px;background:var(--g1);border:1.5px solid var(--g2);border-radius:7px;font-size:12px;font-weight:700;color:var(--g7);cursor:pointer;transition:all .15s;width:100%;}
-.regen-hook-btn:hover{border-color:var(--or);color:var(--or);}
-.regen-hook-btn:disabled{opacity:.4;cursor:not-allowed;}
+
 
 /* rating */
 .rating-sec{border-top:1px solid var(--g2);padding:12px 14px;flex-shrink:0;}
@@ -189,16 +187,6 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .star{font-size:20px;cursor:pointer;opacity:.2;transition:opacity .15s;}
 .star.on{opacity:1;}
 
-/* revise bar */
-.revise-bar{display:none;border-top:1px solid var(--g2);padding:12px;flex-shrink:0;flex-direction:column;gap:7px;background:#fff;}
-.revise-bar.show{display:flex;}
-.revise-label{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--or);text-transform:uppercase;}
-.revise-row{display:flex;gap:6px;}
-.revise-ta{flex:1;border:1.5px solid var(--g2);border-radius:8px;padding:8px 11px;font-family:'DM Sans';font-size:12px;line-height:1.5;resize:none;color:var(--bk);background:#fff;transition:border-color .15s;}
-.revise-ta:focus{outline:none;border-color:var(--or);}
-.revise-btn{background:var(--or);color:#fff;border:none;border-radius:7px;padding:8px 14px;font-family:'DM Sans';font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap;transition:all .15s;}
-.revise-btn:hover:not(:disabled){background:#e55f00;}
-.revise-btn:disabled{background:var(--g3);cursor:not-allowed;}
 
 /* export overlay */
 #ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(6px);}
@@ -280,7 +268,7 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 
     <!-- Input -->
     <div class="chat-in">
-      <textarea class="chat-ta" id="topicInput" rows="3" placeholder="e.g. 'I made $500 in one week selling this one 3D printed product'…"></textarea>
+      <textarea class="chat-ta" id="topicInput" rows="3" placeholder="e.g. 'I made $500 in one week…' — or revise after generating: 'make the hook a question'"></textarea>
       <button class="chat-send" id="sendBtn" onclick="doGenerate()">Generate Script →</button>
     </div>
   </div>
@@ -303,14 +291,7 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
         <p>Type your video idea on the left and hit Generate. The script will appear here, ready to paste into ElevenLabs.</p>
       </div>
     </div>
-    <!-- REVISE BAR -->
-    <div class="revise-bar" id="reviseBar">
-      <div class="revise-label">✏️ Revise this script</div>
-      <div class="revise-row">
-        <textarea class="revise-ta" id="reviseInput" rows="2" placeholder="e.g. 'make the hook a question' or 'make it longer' or 'focus more on Etsy sellers'…"></textarea>
-        <button class="revise-btn" id="reviseBtn" onclick="doRevise()">Apply →</button>
-      </div>
-    </div>
+
   </div>
 
   <!-- RESIZE HANDLE — right -->
@@ -383,8 +364,10 @@ function showLoad(show, txt){
   if (txt) document.getElementById('loadTxt').textContent = txt;
 }
 
-// ── GENERATE ─────────────────────────────────────────────
+// ── GENERATE / REVISE ROUTER ────────────────────────────
 async function doGenerate(){
+  // If a script already exists, treat input as revision instructions
+  if (currentScript) { await doRevise(); return; }
   const inp = document.getElementById('topicInput');
   const topic = inp.value.trim();
   if (!topic || document.getElementById('sendBtn').disabled) return;
@@ -424,9 +407,10 @@ async function doGenerate(){
     renderScript(currentScript, topic);
     renderStats(currentScript);
     document.getElementById('copyBtn').disabled = false;
-    document.getElementById('reviseBar').classList.add('show');
+    document.getElementById('topicInput').placeholder = "Type revision instructions, e.g. 'make the hook a question' or 'make it longer'…";
     document.getElementById('ratingSec').style.display = 'block';
-    addMsg('ai', `✅ <strong>${currentScript.estimated_seconds}s script</strong> ready — ${currentScript.word_count} words. Paste into ElevenLabs!`);
+    addMsg('ai', `✅ <strong>${currentScript.estimated_seconds}s script</strong> ready — ${currentScript.word_count} words. Paste into ElevenLabs! Type changes below to revise.`);
+    document.getElementById('sendBtn').textContent = 'Apply Changes →';
 
   } catch(err) {
     removeTyping(); showLoad(false);
@@ -479,59 +463,7 @@ function renderScript(s, topic) {
     </div>
   </div>`;
 
-  const regenHook = `<button class="regen-hook-btn" id="regenHookBtn" onclick="doRegenHook(${JSON.stringify(topic)})">
-    🔄 Not happy with the hook? Regenerate just the hook
-  </button>`;
-
-  wrap.innerHTML = meta + full + regenHook;
-}
-
-// ── REGENERATE HOOK ───────────────────────────────────────
-async function doRegenHook(topic) {
-  if (!currentScript) return;
-  const btn = document.getElementById('regenHookBtn');
-  btn.disabled = true;
-  btn.textContent = '⏳ Generating new hook…';
-
-  try {
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 45000);
-    const res = await fetch(N8N, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        action: 'generate',
-        topic: topic + ' — write a completely DIFFERENT opening hook than before, keep body and CTA structure the same',
-        format: currentScript.format,
-        length: String(currentScript.estimated_seconds),
-        platform: currentScript.platform
-      }),
-      keepalive: true, signal: ctrl.signal
-    });
-    clearTimeout(t);
-    const data = await res.json();
-
-    if (data.success && data.result) {
-      const newHook = data.result.sections && data.result.sections.find(s => s.label === 'Hook');
-      if (newHook && currentScript.sections && currentScript.sections.length > 0) {
-        currentScript.sections[0] = newHook;
-        currentScript.hook = newHook.text;
-        currentScript.script = currentScript.sections.map(s => s.text).join(' ');
-      } else {
-        currentScript = data.result;
-      }
-      renderScript(currentScript, topic);
-      renderStats(currentScript);
-      addMsg('ai', '🔄 New hook generated!');
-    } else {
-      addMsg('ai', '❌ Hook regeneration failed. Try again.');
-    }
-  } catch(err) {
-    addMsg('ai', `❌ ${err.name==='AbortError' ? 'Timed out.' : 'Error: '+err.message}`);
-  }
-
-  const b = document.getElementById('regenHookBtn');
-  if (b) { b.disabled = false; b.textContent = '🔄 Not happy with the hook? Regenerate just the hook'; }
+  wrap.innerHTML = meta + full;
 }
 
 function renderStats(s) {
@@ -614,17 +546,17 @@ function reset(){
   document.getElementById('copyBtn').disabled = true;
 }
 
-// ── REVISE ───────────────────────────────────────────────
+// ── REVISE (uses main chat input) ───────────────────────
 async function doRevise() {
   if (!currentScript) return;
-  const inp = document.getElementById('reviseInput');
+  const inp = document.getElementById('topicInput');
   const instructions = inp.value.trim();
   if (!instructions) return;
 
-  const btn = document.getElementById('reviseBtn');
-  btn.disabled = true;
-  btn.textContent = 'Revising…';
+  document.getElementById('sendBtn').disabled = true;
+  document.getElementById('sendBtn').textContent = 'Revising…';
   addMsg('user', `✏️ ${instructions}`);
+  inp.value = '';
   addTyping();
   showLoad(true, 'Applying your changes…');
 
@@ -637,7 +569,7 @@ async function doRevise() {
       body: JSON.stringify({
         action: 'revise',
         existing_script: currentScript.script,
-        instructions: instructions,
+        instructions,
         format: currentScript.format,
         length: String(currentScript.estimated_seconds),
         platform: currentScript.platform
@@ -646,26 +578,24 @@ async function doRevise() {
     });
     clearTimeout(t);
     const data = await res.json();
-    removeTyping();
-    showLoad(false);
+    removeTyping(); showLoad(false);
 
     if (!data.success) {
       addMsg('ai', `❌ Revision failed: ${data.error || 'Check n8n.'}`);
     } else {
       currentScript = data.result;
-      // preserve topic from existing state
       renderScript(currentScript, currentTopic);
       renderStats(currentScript);
       addMsg('ai', '✅ Script revised!');
-      inp.value = '';
     }
   } catch(err) {
     removeTyping(); showLoad(false);
     addMsg('ai', `❌ ${err.name==='AbortError' ? 'Timed out.' : 'Error: '+err.message}`);
   }
 
-  btn.disabled = false;
-  btn.textContent = 'Apply →';
+  document.getElementById('sendBtn').disabled = false;
+  // Update button label based on state
+  document.getElementById('sendBtn').textContent = currentScript ? 'Apply Changes →' : 'Generate Script →';
 }
 
 // ── RATING ───────────────────────────────────────────────
