@@ -14,17 +14,14 @@
 }
 html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:var(--g1);color:var(--bk);}
 
-/* ── TOPBAR ── */
 #tb{position:fixed;top:0;left:0;right:0;height:var(--top-h);background:#fff;border-bottom:1px solid var(--g2);display:flex;align-items:center;padding:0 16px;gap:10px;z-index:200;box-shadow:0 1px 4px rgba(0,0,0,.06);}
 .logo{font-family:'Bebas Neue';font-size:19px;letter-spacing:2px;color:var(--or);}
 .logo-sub{font-size:11px;color:var(--g5);font-weight:600;}
-.tsep{width:1px;height:20px;background:var(--g2);}
 .sp{flex:1;}
 .xb{display:flex;align-items:center;gap:6px;padding:8px 16px;border-radius:7px;font-size:12px;font-weight:700;border:none;cursor:pointer;transition:all .15s;white-space:nowrap;background:var(--or);color:#fff;}
 .xb:hover{background:#e55f00;}
 .xb:disabled{opacity:.35;cursor:not-allowed;}
 
-/* ── LAYOUT ── */
 #app{position:fixed;top:var(--top-h);left:0;right:0;bottom:0;display:flex;}
 #chat{background:#fff;border-right:1px solid var(--g2);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;}
 #chat.collapsed{width:0!important;overflow:hidden;border-right:none;}
@@ -32,13 +29,11 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 #ed{background:#fff;border-left:1px solid var(--g2);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;}
 #ed.collapsed{width:0!important;overflow:hidden;border-left:none;}
 
-/* ── RESIZE HANDLES ── */
 .rh{width:5px;flex-shrink:0;cursor:col-resize;background:transparent;position:relative;z-index:50;transition:background .1s;}
 .rh:hover,.rh.active{background:var(--or);}
 .rh::after{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:1px;height:36px;background:var(--g3);border-radius:2px;}
 .rh:hover::after,.rh.active::after{background:var(--or);}
 
-/* ── COLLAPSE ── */
 .col-btn{margin-left:auto;width:22px;height:22px;border-radius:5px;border:1px solid var(--g2);background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--g5);transition:all .15s;flex-shrink:0;font-weight:700;line-height:1;}
 .col-btn:hover{border-color:var(--or);color:var(--or);}
 .restore-tab{position:fixed;top:50%;z-index:150;background:#fff;border:1px solid var(--g2);cursor:pointer;display:none;align-items:center;justify-content:center;color:var(--g5);box-shadow:0 2px 8px rgba(0,0,0,.1);transition:all .15s;transform:translateY(-50%);width:16px;padding:12px 0;}
@@ -47,7 +42,6 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 #rtChat{left:0;border-left:none;border-radius:0 5px 5px 0;font-size:10px;writing-mode:vertical-rl;}
 #rtEd{right:0;border-right:none;border-radius:5px 0 0 5px;font-size:10px;writing-mode:vertical-rl;}
 
-/* ══ LEFT — CHAT ══ */
 #stepWrap{padding:10px 14px;border-bottom:1px solid var(--g2);flex-shrink:0;display:flex;align-items:center;}
 .stp{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--g5);padding:4px 8px;border-radius:5px;transition:all .2s;}
 .stp.active{color:var(--or);background:rgba(255,107,0,.07);}
@@ -60,6 +54,22 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .chips{padding:10px 12px;display:flex;flex-wrap:wrap;gap:5px;border-bottom:1px solid var(--g2);flex-shrink:0;}
 .chip{padding:4px 10px;border-radius:100px;border:1.5px solid var(--g2);font-size:11px;font-weight:600;color:var(--g7);cursor:pointer;transition:all .15s;background:#fff;}
 .chip:hover{border-color:var(--or);color:var(--or);}
+
+/* Auto-detect strip */
+.auto-strip{padding:8px 12px;border-bottom:1px solid var(--g2);flex-shrink:0;display:flex;align-items:center;gap:6px;min-height:38px;}
+.auto-strip-label{font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--g5);text-transform:uppercase;flex-shrink:0;}
+.auto-tag{display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:100px;font-size:11px;font-weight:700;}
+.auto-tag.format{background:rgba(255,107,0,.1);color:var(--or);border:1.5px solid rgba(255,107,0,.25);}
+.auto-tag.platform{background:rgba(17,17,17,.06);color:var(--g7);border:1.5px solid var(--g2);}
+.auto-tag.detecting{background:var(--g1);color:var(--g5);border:1.5px dashed var(--g3);animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{opacity:.5}50%{opacity:1}}
+
+/* Length select — only remaining user control */
+.opts{padding:8px 12px;border-bottom:1px solid var(--g2);display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.opt-group{display:flex;flex-direction:column;gap:3px;}
+.opt-group label{font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--g5);text-transform:uppercase;}
+.opt-group select{background:var(--g1);border:1.5px solid var(--g2);color:var(--bk);padding:5px 7px;border-radius:5px;font-family:'DM Sans';font-size:11px;font-weight:600;cursor:pointer;}
+.opt-group select:focus{outline:none;border-color:var(--or);}
 
 #msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;}
 #msgs::-webkit-scrollbar{width:3px;}
@@ -77,13 +87,6 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .typing span:nth-child(3){animation-delay:.3s;}
 @keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
 
-/* Options row */
-.opts{padding:10px 12px;border-bottom:1px solid var(--g2);display:flex;gap:6px;flex-shrink:0;}
-.opt-group{display:flex;flex-direction:column;gap:3px;flex:1;}
-.opt-group label{font-size:9px;font-weight:800;letter-spacing:1.5px;color:var(--g5);text-transform:uppercase;}
-.opt-group select{background:var(--g1);border:1.5px solid var(--g2);color:var(--bk);padding:5px 7px;border-radius:5px;font-family:'DM Sans';font-size:11px;font-weight:600;cursor:pointer;}
-.opt-group select:focus{outline:none;border-color:var(--or);}
-
 .chat-in{padding:12px;border-top:1px solid var(--g2);flex-shrink:0;display:flex;flex-direction:column;gap:7px;}
 .chat-ta{width:100%;border:1.5px solid var(--g2);border-radius:8px;padding:9px 11px;font-family:'DM Sans';font-size:12px;line-height:1.5;resize:none;color:var(--bk);background:#fff;transition:border-color .15s;}
 .chat-ta:focus{outline:none;border-color:var(--or);}
@@ -91,7 +94,6 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .chat-send:hover:not(:disabled){background:#e55f00;}
 .chat-send:disabled{background:var(--g3);cursor:not-allowed;}
 
-/* ══ CENTER — SCRIPT OUTPUT ══ */
 #scriptWrap{flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:16px;}
 #scriptWrap::-webkit-scrollbar{width:3px;}
 #scriptWrap::-webkit-scrollbar-thumb{background:var(--g2);border-radius:2px;}
@@ -101,69 +103,29 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .empty-state h3{font-size:16px;font-weight:800;}
 .empty-state p{font-size:12px;color:var(--g5);line-height:1.6;max-width:240px;}
 
-/* Loading spinner */
 #loadWrap{display:none;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:14px;}
 #loadWrap.on{display:flex;}
 .spin{width:44px;height:44px;border-radius:50%;border:3px solid var(--g2);border-top-color:var(--or);animation:spin .8s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .load-txt{font-size:13px;font-weight:700;color:var(--g7);}
 .load-sub{font-size:11px;color:var(--g5);}
+/* Multi-step load indicator */
+.load-steps{display:flex;flex-direction:column;gap:6px;margin-top:4px;}
+.load-step{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--g5);transition:all .3s;}
+.load-step.active{color:var(--or);font-weight:700;}
+.load-step.done{color:#22c55e;}
+.load-step-dot{width:7px;height:7px;border-radius:50%;background:var(--g3);flex-shrink:0;transition:all .3s;}
+.load-step.active .load-step-dot{background:var(--or);}
+.load-step.done .load-step-dot{background:#22c55e;}
 
-/* Script cards */
 .script-meta{display:flex;gap:8px;flex-wrap:wrap;}
 .meta-chip{background:#fff;border:1px solid var(--g2);border-radius:100px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--g7);display:flex;align-items:center;gap:4px;}
 .meta-chip span{color:var(--or);}
 
-.section-card{background:#fff;border:1.5px solid var(--g2);border-radius:10px;overflow:hidden;}
-.section-head{padding:10px 14px;background:var(--g1);border-bottom:1px solid var(--g2);display:flex;align-items:center;justify-content:space-between;}
-.section-label{font-size:10px;font-weight:800;letter-spacing:2px;color:var(--g5);text-transform:uppercase;}
-.section-copy{padding:4px 10px;background:#fff;border:1.5px solid var(--g2);border-radius:5px;font-size:10px;font-weight:700;color:var(--g5);cursor:pointer;transition:all .15s;}
-.section-copy:hover{border-color:var(--or);color:var(--or);}
-.section-copy.copied{border-color:#22c55e;color:#22c55e;}
-.section-body{padding:14px;font-size:13px;line-height:1.75;color:var(--bk);white-space:pre-wrap;}
-
-/* Full script card */
-.full-script{background:#fff;border:1.5px solid var(--or);border-radius:10px;overflow:hidden;}
-.full-script-head{background:linear-gradient(135deg,var(--or),#ff8c3a);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
-.full-script-head h3{font-family:'Bebas Neue';font-size:16px;letter-spacing:2px;color:#fff;}
-.copy-all{padding:5px 12px;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.4);border-radius:5px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;transition:all .15s;}
-.copy-all:hover{background:rgba(255,255,255,.35);}
-.copy-all.copied{background:rgba(255,255,255,.9);color:var(--or);}
-.full-script-body{padding:16px;font-size:14px;line-height:1.85;color:var(--bk);white-space:pre-wrap;}
-
-/* Hook highlight */
-.hook-card{background:linear-gradient(135deg,rgba(255,107,0,.07),rgba(255,107,0,.03));border:1.5px solid rgba(255,107,0,.2);border-radius:10px;padding:14px 16px;}
-.hook-label{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--or);text-transform:uppercase;margin-bottom:8px;}
-.hook-text{font-size:14px;font-weight:700;color:var(--bk);line-height:1.5;}
-
-/* ══ RIGHT — STATS PANEL ══ */
-.ed-head{padding:11px 14px;border-bottom:1px solid var(--g2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.ed-head h3{font-size:10px;letter-spacing:2px;color:var(--g5);text-transform:uppercase;}
-
-.ed-body{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px;}
-.ed-body::-webkit-scrollbar{width:3px;}
-.ed-body::-webkit-scrollbar-thumb{background:var(--g2);border-radius:2px;}
-
-.stat-block{background:var(--g1);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;}
-.stat-block .stat-label{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--g5);text-transform:uppercase;}
-.stat-block .stat-value{font-size:22px;font-family:'Bebas Neue';letter-spacing:1px;color:var(--bk);}
-.stat-block .stat-sub{font-size:11px;color:var(--g5);}
-.stat-block.good .stat-value{color:#22c55e;}
-.stat-block.warn .stat-value{color:#f59e0b;}
-.stat-block.bad .stat-value{color:#ef4444;}
-
-.divl{height:1px;background:var(--g2);}
-
-.tips-sec h4{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--g5);text-transform:uppercase;margin-bottom:8px;}
-.tip-row{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:var(--g7);line-height:1.45;padding:4px 0;border-bottom:1px solid var(--g2);}
-.tip-row:last-child{border-bottom:none;}
-.tip-icon{font-size:12px;flex-shrink:0;margin-top:1px;}
-
-/* inline section highlights */
 .script-viewer{background:#fff;border:1.5px solid var(--g2);border-radius:10px;overflow:hidden;}
 .script-viewer-head{background:linear-gradient(135deg,var(--or),#ff8c3a);padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
 .script-viewer-head h3{font-family:'Bebas Neue';font-size:16px;letter-spacing:2px;color:#fff;}
-.script-viewer-body{padding:20px;font-size:14px;line-height:2;color:var(--bk);overflow-y:auto;max-height:none;}
+.script-viewer-body{padding:20px;font-size:14px;line-height:2;color:var(--bk);}
 .seg{display:inline;border-radius:3px;padding:1px 0;cursor:default;transition:background .15s;}
 .seg-hook{background:rgba(255,107,0,.13);}
 .seg-body{background:rgba(255,214,0,.13);}
@@ -178,30 +140,45 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 .legend-dot.hook{background:rgba(255,107,0,.3);}
 .legend-dot.body{background:rgba(255,214,0,.4);}
 .legend-dot.cta{background:rgba(34,197,94,.25);}
+.copy-all{padding:5px 12px;background:rgba(255,255,255,.2);border:1.5px solid rgba(255,255,255,.4);border-radius:5px;font-size:11px;font-weight:700;color:#fff;cursor:pointer;transition:all .15s;}
+.copy-all:hover{background:rgba(255,255,255,.35);}
+.copy-all.copied{background:rgba(255,255,255,.9);color:var(--or);}
 
+.ed-head{padding:11px 14px;border-bottom:1px solid var(--g2);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.ed-head h3{font-size:10px;letter-spacing:2px;color:var(--g5);text-transform:uppercase;}
+.ed-body{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:12px;}
+.ed-body::-webkit-scrollbar{width:3px;}
+.ed-body::-webkit-scrollbar-thumb{background:var(--g2);border-radius:2px;}
 
-/* rating */
+.stat-block{background:var(--g1);border-radius:8px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;}
+.stat-block .stat-label{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--g5);text-transform:uppercase;}
+.stat-block .stat-value{font-size:22px;font-family:'Bebas Neue';letter-spacing:1px;color:var(--bk);}
+.stat-block .stat-sub{font-size:11px;color:var(--g5);}
+.stat-block.good .stat-value{color:#22c55e;}
+.stat-block.warn .stat-value{color:#f59e0b;}
+.stat-block.bad .stat-value{color:#ef4444;}
+.divl{height:1px;background:var(--g2);}
+.tips-sec h4{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--g5);text-transform:uppercase;margin-bottom:8px;}
+.tip-row{display:flex;align-items:flex-start;gap:6px;font-size:11px;color:var(--g7);line-height:1.45;padding:4px 0;border-bottom:1px solid var(--g2);}
+.tip-row:last-child{border-bottom:none;}
+.tip-icon{font-size:12px;flex-shrink:0;margin-top:1px;}
+
 .rating-sec{border-top:1px solid var(--g2);padding:12px 14px;flex-shrink:0;}
 .rating-sec h4{font-size:9px;font-weight:800;letter-spacing:2px;color:var(--g5);text-transform:uppercase;margin-bottom:8px;}
 .stars{display:flex;gap:4px;}
 .star{font-size:20px;cursor:pointer;opacity:.2;transition:opacity .15s;}
 .star.on{opacity:1;}
 
-
-/* export overlay */
 #ov{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(6px);}
 #ov.on{display:flex;}
 .ocard{background:#fff;border-radius:14px;padding:32px 36px;text-align:center;width:280px;display:flex;flex-direction:column;gap:12px;box-shadow:0 24px 64px rgba(0,0,0,.25);}
 .ocard h3{font-family:'Bebas Neue';font-size:22px;letter-spacing:2px;color:var(--or);}
 .ocard p{font-size:12px;color:var(--g5);line-height:1.6;}
-.ocard-btn{background:var(--or);color:#fff;border:none;border-radius:7px;padding:10px;font-family:'DM Sans';font-size:13px;font-weight:700;cursor:pointer;margin-top:4px;}
-.ocard-btn:hover{background:#e55f00;}
 .ocard-close{background:var(--g1);color:var(--g7);border:none;border-radius:7px;padding:8px;font-family:'DM Sans';font-size:12px;font-weight:600;cursor:pointer;}
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
 <div id="tb">
   <div class="logo">meshminds3d</div>
   <span class="logo-sub">· Voiceover Studio</span>
@@ -210,8 +187,6 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 </div>
 
 <div id="app">
-
-  <!-- LEFT: CHAT -->
   <div id="chat">
     <div id="stepWrap">
       <div class="stp active" id="s1"><div class="stp-n">1</div>Idea</div>
@@ -220,7 +195,6 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
       <button class="col-btn" id="colChat" onclick="togglePanel('chat')" title="Hide chat">‹</button>
     </div>
 
-    <!-- Quick ideas -->
     <div class="chips">
       <div class="chip" onclick="setT('5 3D printed products that sell for $30 or more on Etsy')">Etsy bestsellers</div>
       <div class="chip" onclick="setT('The biggest mistake 3D printing sellers make when pricing')">Pricing mistake</div>
@@ -229,16 +203,15 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
       <div class="chip" onclick="setT('Bambu Lab A1 Mini — is it worth it for selling prints?')">Printer review</div>
     </div>
 
-    <!-- Format + length options -->
+    <!-- Auto-detected format/platform strip -->
+    <div class="auto-strip" id="autoStrip">
+      <span class="auto-strip-label">Auto</span>
+      <div class="auto-tag detecting" id="tagFormat">⚡ Format</div>
+      <div class="auto-tag detecting" id="tagPlatform">🛒 Platform</div>
+    </div>
+
+    <!-- Only length remains as user choice -->
     <div class="opts">
-      <div class="opt-group">
-        <label>Format</label>
-        <select id="selFormat">
-          <option value="reveal">Reveal / List</option>
-          <option value="warning">Warning</option>
-          <option value="experiment">Experiment</option>
-        </select>
-      </div>
       <div class="opt-group">
         <label>Length</label>
         <select id="selLength">
@@ -246,67 +219,53 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
           <option value="30">30 seconds</option>
         </select>
       </div>
-      <div class="opt-group">
-        <label>Platform</label>
-        <select id="selPlatform">
-          <option value="General">General</option>
-          <option value="Etsy">Etsy</option>
-          <option value="Amazon">Amazon</option>
-          <option value="Shopify">Shopify</option>
-          <option value="Local">Local</option>
-        </select>
-      </div>
+      <div style="flex:1;font-size:11px;color:var(--g5);line-height:1.4;padding-top:14px;">Format and platform are picked automatically based on your topic.</div>
     </div>
 
-    <!-- Messages -->
     <div id="msgs">
       <div class="msg ai">
-        <div class="bubble">👋 Type your video idea below. I'll write a TTS-ready voiceover script — formatted for ElevenLabs, no symbols, numbers written as words.</div>
+        <div class="bubble">👋 Type your video idea. Format and platform are detected automatically — I'll research real prices and products before writing.</div>
         <div class="msg-time">Now</div>
       </div>
     </div>
 
-    <!-- Input -->
     <div class="chat-in">
-      <textarea class="chat-ta" id="topicInput" rows="3" placeholder="e.g. 'I made $500 in one week…' — or revise after generating: 'make the hook a question'"></textarea>
+      <textarea class="chat-ta" id="topicInput" rows="3" placeholder="e.g. 'I made $500 in one week…' — or revise after: 'make the hook a question'"></textarea>
       <button class="chat-send" id="sendBtn" onclick="doGenerate()">Generate Script →</button>
     </div>
   </div>
 
-  <!-- RESIZE HANDLE — left -->
   <div class="rh" id="rhl" onmousedown="startResize(event,'left')"></div>
 
-  <!-- CENTER: SCRIPT OUTPUT -->
   <div id="main">
     <div id="loadWrap">
       <div class="spin"></div>
-      <div class="load-txt" id="loadTxt">Writing your script…</div>
-      <div class="load-sub">Usually takes 5–10 seconds</div>
+      <div class="load-txt" id="loadTxt">Working on your script…</div>
+      <div class="load-steps">
+        <div class="load-step" id="ls1"><div class="load-step-dot"></div>Detecting format + platform</div>
+        <div class="load-step" id="ls2"><div class="load-step-dot"></div>Researching real prices + products</div>
+        <div class="load-step" id="ls3"><div class="load-step-dot"></div>Writing script</div>
+        <div class="load-step" id="ls4"><div class="load-step-dot"></div>QA check</div>
+      </div>
     </div>
-
     <div id="scriptWrap">
       <div class="empty-state">
         <div class="eicon">🎙️</div>
         <h3>No script yet</h3>
-        <p>Type your video idea on the left and hit Generate. The script will appear here, ready to paste into ElevenLabs.</p>
+        <p>Type your video idea and hit Generate. Real product prices and trends are researched automatically before writing.</p>
       </div>
     </div>
-
   </div>
 
-  <!-- RESIZE HANDLE — right -->
   <div class="rh" id="rhr" onmousedown="startResize(event,'right')"></div>
 
-  <!-- RIGHT: STATS + TIPS -->
   <div id="ed">
     <div class="ed-head">
       <h3>Script Details</h3>
       <button class="col-btn" id="colEd" onclick="togglePanel('ed')" title="Hide panel">›</button>
     </div>
     <div class="ed-body" id="edBody">
-      <div style="padding:20px 0;text-align:center;color:var(--g5);font-size:12px;line-height:1.6;">
-        Script stats and TTS tips appear here after generating.
-      </div>
+      <div style="padding:20px 0;text-align:center;color:var(--g5);font-size:12px;line-height:1.6;">Script stats appear here after generating.</div>
     </div>
     <div class="rating-sec" id="ratingSec" style="display:none">
       <h4>Rate this script</h4>
@@ -318,7 +277,7 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 <div id="ov">
   <div class="ocard">
     <h3>Script Copied! 🎙️</h3>
-    <p>Paste it into ElevenLabs or your TTS tool of choice. Remember — all numbers are written as words, no symbols.</p>
+    <p>Paste it into ElevenLabs. Numbers are written as words, no symbols.</p>
     <button class="ocard-close" onclick="document.getElementById('ov').classList.remove('on')">Close</button>
   </div>
 </div>
@@ -327,11 +286,36 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 const N8N = 'https://meshminds.app.n8n.cloud/webhook/voiceover-studio';
 
 let currentScript = null;
-let currentTopic = '';
 let chatW = 320, edW = 260;
 const MIN_PANEL = 160, MIN_CTR = 300;
 
-// ── HELPERS ──────────────────────────────────────────────
+const LOAD_STEPS = ['ls1','ls2','ls3','ls4'];
+let loadStepTimer = null;
+
+function setLoadStep(n) {
+  LOAD_STEPS.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.className = 'load-step' + (i < n ? ' done' : i === n ? ' active' : '');
+  });
+}
+
+function startLoadAnimation() {
+  let step = 0;
+  setLoadStep(0);
+  const delays = [0, 1800, 4000, 7000];
+  delays.forEach((d, i) => {
+    setTimeout(() => setLoadStep(i), d);
+  });
+}
+
+function stopLoadAnimation() {
+  LOAD_STEPS.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.className = 'load-step';
+  });
+}
+
 function setT(t){ document.getElementById('topicInput').value = t; document.getElementById('topicInput').focus(); }
 
 function addMsg(role, html) {
@@ -358,23 +342,39 @@ function setStep(n){
   });
 }
 
-function showLoad(show, txt){
+function showLoad(show){
   document.getElementById('loadWrap').classList.toggle('on', show);
   document.getElementById('scriptWrap').style.display = show ? 'none' : 'flex';
-  if (txt) document.getElementById('loadTxt').textContent = txt;
+  if (show) startLoadAnimation(); else stopLoadAnimation();
 }
 
-// ── GENERATE / REVISE ROUTER ────────────────────────────
+function setAutoTags(format, platform) {
+  const fEl = document.getElementById('tagFormat');
+  const pEl = document.getElementById('tagPlatform');
+  const labels = { reveal: '📋 Reveal', warning: '⚠️ Warning', experiment: '🧪 Experiment' };
+  if (format) {
+    fEl.textContent = labels[format] || format;
+    fEl.className = 'auto-tag format';
+  } else {
+    fEl.textContent = '⚡ Format';
+    fEl.className = 'auto-tag detecting';
+  }
+  if (platform) {
+    pEl.textContent = '🛒 ' + platform;
+    pEl.className = 'auto-tag platform';
+  } else {
+    pEl.textContent = '🛒 Platform';
+    pEl.className = 'auto-tag detecting';
+  }
+}
+
 async function doGenerate(){
-  // If a script already exists, treat input as revision instructions
   if (currentScript) { await doRevise(); return; }
   const inp = document.getElementById('topicInput');
   const topic = inp.value.trim();
   if (!topic || document.getElementById('sendBtn').disabled) return;
 
-  const format = document.getElementById('selFormat').value;
   const length = document.getElementById('selLength').value;
-  const platform = document.getElementById('selPlatform').value;
 
   document.getElementById('sendBtn').disabled = true;
   document.getElementById('sendBtn').textContent = 'Writing…';
@@ -382,15 +382,16 @@ async function doGenerate(){
   inp.value = '';
   addTyping();
   setStep(2);
-  showLoad(true, `Writing your ${length}s ${format} script…`);
+  showLoad(true);
+  setAutoTags(null, null); // reset to detecting
 
   try {
     const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), 60000);
+    const t = setTimeout(() => ctrl.abort(), 90000); // longer timeout for research
     const res = await fetch(N8N, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ action: 'generate', topic, format, length, platform }),
+      body: JSON.stringify({ action: 'generate', topic, length }),
       keepalive: true, signal: ctrl.signal
     });
     clearTimeout(t);
@@ -400,55 +401,54 @@ async function doGenerate(){
 
     if (!data.success) {
       addMsg('ai', `❌ <strong>Failed:</strong> ${data.error || 'Check n8n workflow.'}`);
-      setStep(1); reset(); return;
+      setStep(1); setAutoTags(null, null); return;
     }
 
     currentScript = data.result;
-    renderScript(currentScript, topic);
+    setAutoTags(currentScript.format, currentScript.platform);
+    renderScript(currentScript);
     renderStats(currentScript);
     document.getElementById('copyBtn').disabled = false;
-    document.getElementById('topicInput').placeholder = "Type revision instructions, e.g. 'make the hook a question' or 'make it longer'…";
+    document.getElementById('topicInput').placeholder = "Type revision instructions, e.g. 'make the hook a question'…";
     document.getElementById('ratingSec').style.display = 'block';
-    addMsg('ai', `✅ <strong>${currentScript.estimated_seconds}s script</strong> ready — ${currentScript.word_count} words. Paste into ElevenLabs! Type changes below to revise.`);
+
+    const qaNote = currentScript.qa_score ? ` — QA score: ${currentScript.qa_score}/10` : '';
+    addMsg('ai', `✅ <strong>${currentScript.estimated_seconds}s ${currentScript.format} script</strong> · ${currentScript.platform} · ${currentScript.word_count} words${qaNote}. Ready to copy!`);
     document.getElementById('sendBtn').textContent = 'Apply Changes →';
 
   } catch(err) {
     removeTyping(); showLoad(false);
-    addMsg('ai', `❌ ${err.name==='AbortError'?'Timed out — try again.':'Error: '+err.message}`);
-    setStep(1); reset();
+    addMsg('ai', `❌ ${err.name==='AbortError'?'Timed out — research step can take up to 30s, try again.':'Error: '+err.message}`);
+    setStep(1); setAutoTags(null, null);
   }
 
   document.getElementById('sendBtn').disabled = false;
-  document.getElementById('sendBtn').textContent = 'Generate Script →';
 }
 
-// ── RENDER SCRIPT ────────────────────────────────────────
-function renderScript(s, topic) {
+function renderScript(s) {
   const wrap = document.getElementById('scriptWrap');
   wrap.style.display = 'flex';
   wrap.style.flexDirection = 'column';
 
-  // Meta chips
-  const meta = `<div class="script-meta">
-    <div class="meta-chip">🎙️ <span>${s.estimated_seconds}s</span></div>
-    <div class="meta-chip">📝 <span>${s.word_count} words</span></div>
-    <div class="meta-chip">📐 <span>${s.format}</span></div>
-    <div class="meta-chip">🛒 <span>${s.platform}</span></div>
-  </div>`;
-
-  // Build highlighted script — one continuous block, sections color-coded inline
   const colorMap = { Hook: 'hook', Body: 'body', CTA: 'cta' };
   let scriptHtml = '';
   const secs = s.sections || [];
   if (secs.length > 0) {
     secs.forEach(sec => {
       const cls = colorMap[sec.label] || 'body';
-      const safeText = escHtml(sec.text);
-      scriptHtml += `<span class="seg seg-${cls}"><span class="seg-label ${cls}">${sec.label}</span>${safeText}</span> `;
+      scriptHtml += `<span class="seg seg-${cls}"><span class="seg-label ${cls}">${sec.label}</span>${escHtml(sec.text)}</span> `;
     });
   } else {
     scriptHtml = escHtml(s.script);
   }
+
+  const meta = `<div class="script-meta">
+    <div class="meta-chip">🎙️ <span>${s.estimated_seconds}s</span></div>
+    <div class="meta-chip">📝 <span>${s.word_count} words</span></div>
+    <div class="meta-chip">📐 <span>${s.format}</span></div>
+    <div class="meta-chip">🛒 <span>${s.platform}</span></div>
+    ${s.qa_score ? `<div class="meta-chip">✅ <span>QA ${s.qa_score}/10</span></div>` : ''}
+  </div>`;
 
   const full = `<div class="script-viewer">
     <div class="script-viewer-head">
@@ -470,11 +470,10 @@ function renderStats(s) {
   const qaScore = s.qa_score || 0;
   const qaPass = s.qa_passed;
   const qaCls = qaPass ? 'good' : (qaScore >= 6 ? 'warn' : 'bad');
-  const qaLabel = qaPass ? '✓ Passed QA' : `⚠️ ${s.qa_feedback || 'Check script quality'}`;
   const qaSection = qaScore ? `<div class="stat-block ${qaCls}">
     <div class="stat-label">QA Score</div>
     <div class="stat-value">${qaScore}/10</div>
-    <div class="stat-sub" style="line-height:1.45">${qaLabel}</div>
+    <div class="stat-sub">${qaPass ? '✓ Passed' : '⚠️ ' + (s.qa_feedback || 'Check script')}</div>
   </div>` : '';
 
   const wc = s.word_count || 0;
@@ -482,44 +481,40 @@ function renderStats(s) {
   const targetMin = secs === 60 ? 130 : 65;
   const targetMax = secs === 60 ? 150 : 75;
   const wcClass = (wc >= targetMin && wc <= targetMax) ? 'good' : (Math.abs(wc - targetMin) < 15 ? 'warn' : 'bad');
-  const wcNote = (wc >= targetMin && wc <= targetMax) ? `✓ Perfect for ${secs}s` : (wc < targetMin ? 'Too short' : 'Too long');
 
   document.getElementById('edBody').innerHTML = `
     <div class="stat-block ${wcClass}">
       <div class="stat-label">Word Count</div>
       <div class="stat-value">${wc}</div>
-      <div class="stat-sub">${wcNote} (target ${targetMin}–${targetMax})</div>
+      <div class="stat-sub">${(wc >= targetMin && wc <= targetMax) ? '✓ Perfect' : (wc < targetMin ? 'Too short' : 'Too long')} (${targetMin}–${targetMax})</div>
     </div>
     <div class="stat-block">
       <div class="stat-label">Est. Duration</div>
       <div class="stat-value">${secs}s</div>
-      <div class="stat-sub">At ~140 wpm spoken pace</div>
+      <div class="stat-sub">~140 wpm</div>
     </div>
     <div class="stat-block">
       <div class="stat-label">Format</div>
       <div class="stat-value">${(s.format||'—').toUpperCase()}</div>
-      <div class="stat-sub">${s.platform || ''}</div>
+      <div class="stat-sub">${s.platform || ''} · Auto-selected</div>
     </div>
     ${qaSection}
     <div class="divl"></div>
     <div class="tips-sec">
       <h4>ElevenLabs Tips</h4>
-      <div class="tip-row"><div class="tip-icon">✅</div><div>Numbers written as words — paste directly</div></div>
+      <div class="tip-row"><div class="tip-icon">✅</div><div>Numbers as words — paste directly</div></div>
       <div class="tip-row"><div class="tip-icon">✅</div><div>No $ % & symbols — clean for TTS</div></div>
       <div class="tip-row"><div class="tip-icon">💡</div><div>Commas = short pause, periods = long pause</div></div>
-      <div class="tip-row"><div class="tip-icon">💡</div><div>Use "Stability" 0.4–0.5 for natural delivery</div></div>
-      <div class="tip-row"><div class="tip-icon">⚡</div><div>Hook should feel urgent — check first 3s</div></div>
+      <div class="tip-row"><div class="tip-icon">💡</div><div>Stability 0.4–0.5 for natural delivery</div></div>
     </div>`;
 }
 
-// ── COPY ─────────────────────────────────────────────────
 function copyScript(){
   if (!currentScript) return;
   navigator.clipboard.writeText(currentScript.script).then(() => {
     document.getElementById('ov').classList.add('on');
     const btn = document.getElementById('copyBtn');
-    const o = btn.textContent;
-    btn.textContent = '✓ Copied!';
+    const o = btn.textContent; btn.textContent = '✓ Copied!';
     setTimeout(() => btn.textContent = o, 2000);
   });
 }
@@ -533,20 +528,8 @@ function copyAll(){
   });
 }
 
-function copySection(btn, text){
-  navigator.clipboard.writeText(text).then(() => {
-    btn.textContent = '✓'; btn.classList.add('copied');
-    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
-  });
-}
-
 function escHtml(t){ return String(t||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-function reset(){
-  document.getElementById('copyBtn').disabled = true;
-}
-
-// ── REVISE (uses main chat input) ───────────────────────
 async function doRevise() {
   if (!currentScript) return;
   const inp = document.getElementById('topicInput');
@@ -558,7 +541,7 @@ async function doRevise() {
   addMsg('user', `✏️ ${instructions}`);
   inp.value = '';
   addTyping();
-  showLoad(true, 'Applying your changes…');
+  showLoad(true);
 
   try {
     const ctrl = new AbortController();
@@ -584,7 +567,8 @@ async function doRevise() {
       addMsg('ai', `❌ Revision failed: ${data.error || 'Check n8n.'}`);
     } else {
       currentScript = data.result;
-      renderScript(currentScript, currentTopic);
+      setAutoTags(currentScript.format, currentScript.platform);
+      renderScript(currentScript);
       renderStats(currentScript);
       addMsg('ai', '✅ Script revised!');
     }
@@ -594,17 +578,14 @@ async function doRevise() {
   }
 
   document.getElementById('sendBtn').disabled = false;
-  // Update button label based on state
   document.getElementById('sendBtn').textContent = currentScript ? 'Apply Changes →' : 'Generate Script →';
 }
 
-// ── RATING ───────────────────────────────────────────────
 function rate(n){
   [1,2,3,4,5].forEach(i => { const s=document.getElementById('star'+i); if(s) s.className='star'+(i<=n?' on':''); });
-  setTimeout(() => addMsg('ai', n>=4 ? `❤️ Great! What\'s the next video idea?` : `Thanks for the ${n}/5! What should be different?`), 300);
+  setTimeout(() => addMsg('ai', n>=4 ? `❤️ Great! Next idea?` : `Thanks for the ${n}/5. What should be different?`), 300);
 }
 
-// ── PANEL COLLAPSE + RESIZE ───────────────────────────────
 function applyWidths(){
   const chatEl = document.getElementById('chat');
   const edEl = document.getElementById('ed');
